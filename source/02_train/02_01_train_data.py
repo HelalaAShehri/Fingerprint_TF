@@ -71,6 +71,7 @@ def build_model():
     net = layers.Conv2D(128, kernel_size = 3, activation = 'relu')(net)
     net = layers.MaxPooling2D(pool_size = 2)(net)
     net = layers.Flatten()(net)
+    net = layers.Dropout(0.3)(net)
     net = layers.Dense(512, activation = 'relu')(net)
     net = layers.Dense(1, activation = 'sigmoid')(net)
     model = Model(inputs = [x1, x2], outputs = net)
@@ -176,7 +177,7 @@ if (os.path.exists(checkpoint_path + '.index')):
 
 # %%
 # training model
-history = model.fit(train_gen, epochs = 1000, validation_data = val_gen, callbacks = [cp_callback, tensorboard_callback])
+history = model.fit(train_gen, epochs = 100, validation_data = val_gen, callbacks = [cp_callback, tensorboard_callback])
 
 
 
