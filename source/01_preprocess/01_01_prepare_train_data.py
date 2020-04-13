@@ -162,6 +162,7 @@ for item in img_list:
     (crop_l, crop_t, crop_r, crop_b) = get_fp_region(img_path)
 
     img = Image.open(img_path)
+    range_val = finger_idx
 
     # crop for process image
     crop_x = (ExpWidth - CropWidth) / 2
@@ -174,33 +175,36 @@ for item in img_list:
     img_c.save(img_path_new)
     finger_idx += 1
 
-    # rotate crop
-    for i in range(3):
-        ang = random.randint(10, 350)
-        img_rot = img.rotate(ang)
-        img_c = img_rot.crop([crop_x, crop_y, crop_x + CropWidth, crop_y + CropHeight])
+    # move crop
+    for i in range(4):
+        dist = random.randint(10, 30)
+        if (i == 0): # left
+            if (crop_x - dist <= 0):
+                continue
+            img_c = img.crop([crop_x - dist, crop_y, crop_x + CropWidth - dist, crop_y + CropHeight])
+        elif (i == 1): # right
+            if (crop_x + CropWidth + dist >= ExpWidth):
+                continue
+            img_c = img.crop([crop_x + dist, crop_y, crop_x + CropWidth + dist, crop_y + CropHeight])
+        elif (i == 2): # up
+            if (crop_y - dist <= 0):
+                continue
+            img_c = img.crop([crop_x, crop_y - dist, crop_x + CropWidth, crop_y + CropHeight - dist])
+        elif (i == 3): # down
+            if (crop_y + CropHeight + dist >= ExpHeight):
+                continue
+            img_c = img.crop([crop_x, crop_y + dist, crop_x + CropWidth, crop_y + CropHeight + dist])
+        else:
+            break
         img_path_new = base_dir + '{0:05d}'.format(finger_id) + '_' + '{0:02d}'.format(finger_idx) + '.bmp'
         img_c.save(img_path_new)
         finger_idx += 1
 
-    # auto contrast
-    for i in range(3):
+    # rotate crop
+    range_val = 10 - (finger_idx - range_val)
+    for i in range(range_val):
         ang = random.randint(10, 350)
-        img_autocont = ImageOps.autocontrast(img, 20)
-        img_rot = img_autocont.rotate(ang)
-        img_c = img_rot.crop([crop_x, crop_y, crop_x + CropWidth, crop_y + CropHeight])
-        img_path_new = base_dir + '{0:05d}'.format(finger_id) + '_' + '{0:02d}'.format(finger_idx) + '.bmp'
-        img_c.save(img_path_new)
-        finger_idx += 1
-    
-    # noise
-    for i in range(3):
-        ang = random.randint(10, 350)
-        img_autocont = ImageOps.autocontrast(img, 20)
-        img_rot = img_autocont.rotate(ang)
-        img_arr = np.array(img_rot)
-        util.random_noise(img_arr, mode = 'gaussian')
-        img_rot = Image.fromarray(img_arr)
+        img_rot = img.rotate(ang)
         img_c = img_rot.crop([crop_x, crop_y, crop_x + CropWidth, crop_y + CropHeight])
         img_path_new = base_dir + '{0:05d}'.format(finger_id) + '_' + '{0:02d}'.format(finger_idx) + '.bmp'
         img_c.save(img_path_new)
