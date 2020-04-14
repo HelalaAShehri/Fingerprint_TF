@@ -51,13 +51,14 @@ def build_model():
 
     # share weights both inputs
     inputs = layers.Input(shape = (160, 160, 1))
-    feature = layers.Conv2D(32, kernel_size = 3, activation = 'relu')(inputs)
+    feature = layers.Conv2D(32, kernel_size = 5, padding = 'Same', activation = 'relu')(inputs)
+    feature = layers.Conv2D(32, kernel_size = 5, padding = 'Same', activation = 'relu')(feature)
     feature = layers.MaxPooling2D(pool_size = 2)(feature)
-    feature = layers.Conv2D(64, kernel_size = 3, activation = 'relu')(feature)
-    feature = layers.MaxPooling2D(pool_size = 2)(feature)
-    feature = layers.Conv2D(128, kernel_size = 3, activation = 'relu')(feature)
-    feature = layers.MaxPooling2D(pool_size = 2)(feature)
-    feature_model = Model(inputs = inputs, outputs = feature)
+    feature = layers.Dropout(0.25)(feature)
+    feature = layers.Conv2D(64, kernel_size = 3, padding = 'Same', activation = 'relu')(feature)
+    feature = layers.Conv2D(64, kernel_size = 3, padding = 'Same', activation = 'relu')(feature)
+    feature = layers.MaxPooling2D(pool_size = 2, strides = 2)(feature)
+    feature = layers.Dropout(0.25)(feature)
 
     # show feature model summary
     feature_model.summary()
@@ -68,11 +69,14 @@ def build_model():
 
     # subtract features
     net = layers.Subtract()([x1_net, x2_net])
-    net = layers.Conv2D(128, kernel_size = 3, activation = 'relu')(net)
-    net = layers.MaxPooling2D(pool_size = 2)(net)
+    net = layers.Conv2D(64, kernel_size = 3, padding = 'Same', activation = 'relu')(net)
+    net = layers.Conv2D(64, kernel_size = 3, padding = 'Same', activation = 'relu')(net)
+    net = layers.MaxPooling2D(pool_size = 2, strides = 2)(net)
+    net = layers.Dropout(0.25)(net)
+
     net = layers.Flatten()(net)
-    net = layers.Dropout(0.3)(net)
-    net = layers.Dense(512, activation = 'relu')(net)
+    net = layers.Dense(256, activation = 'relu')(net)
+    net = layers.Dropout(0.5)(net)
     net = layers.Dense(1, activation = 'sigmoid')(net)
     model = Model(inputs = [x1, x2], outputs = net)
 
@@ -177,7 +181,7 @@ if (os.path.exists(checkpoint_path + '.index')):
 
 # %%
 # training model
-history = model.fit(train_gen, epochs = 100, validation_data = val_gen, callbacks = [cp_callback, tensorboard_callback])
+history = model.fit(train_gen, epochs = 50, validation_data = val_gen, callbacks = [cp_callback, tensorboard_callback])
 
 
 
