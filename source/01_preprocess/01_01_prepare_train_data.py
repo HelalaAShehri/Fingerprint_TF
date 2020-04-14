@@ -171,7 +171,7 @@ for item in img_list:
 
     # single crop
     img_c = img.crop([crop_x, crop_y, crop_x + CropWidth, crop_y + CropHeight])
-    img_path_new = base_dir + '{0:05d}'.format(finger_id) + '_' + '{0:02d}'.format(finger_idx) + '.bmp'
+    img_path_new = base_dir + '{0:05d}'.format(finger_id) + '_' + '{0:03d}'.format(finger_idx) + '.bmp'
     img_c.save(img_path_new)
     finger_idx += 1
 
@@ -196,7 +196,7 @@ for item in img_list:
             img_c = img.crop([crop_x, crop_y + dist, crop_x + CropWidth, crop_y + CropHeight + dist])
         else:
             break
-        img_path_new = base_dir + '{0:05d}'.format(finger_id) + '_' + '{0:02d}'.format(finger_idx) + '.bmp'
+        img_path_new = base_dir + '{0:05d}'.format(finger_id) + '_' + '{0:03d}'.format(finger_idx) + '.bmp'
         img_c.save(img_path_new)
         finger_idx += 1
 
@@ -206,7 +206,7 @@ for item in img_list:
         ang = random.randint(10, 350)
         img_rot = img.rotate(ang)
         img_c = img_rot.crop([crop_x, crop_y, crop_x + CropWidth, crop_y + CropHeight])
-        img_path_new = base_dir + '{0:05d}'.format(finger_id) + '_' + '{0:02d}'.format(finger_idx) + '.bmp'
+        img_path_new = base_dir + '{0:05d}'.format(finger_id) + '_' + '{0:03d}'.format(finger_idx) + '.bmp'
         img_c.save(img_path_new)
         finger_idx += 1
 
