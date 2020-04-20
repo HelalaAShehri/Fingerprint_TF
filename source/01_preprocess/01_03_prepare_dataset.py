@@ -70,8 +70,9 @@ labels = np.empty((len(img_list), 1), dtype = np.uint16)
 for i, img_path in enumerate(img_list):
     print(i)
     img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
-    tmp_img = img.reshape(160, 160, 1)
-    imgs[i] = hist_stretch(tmp_img, 160, 160, 128)
+    #tmp_img = img.reshape(160, 160, 1)
+    #imgs[i] = hist_stretch(tmp_img, 160, 160, 128)
+    imgs[i] = img.reshape(160, 160, 1)
 
     # get user id
     labels[i] = parse_file_name2(img_path)
@@ -90,8 +91,9 @@ labels = np.empty((len(img_list), 1), dtype = np.uint16)
 for i, img_path in enumerate(img_list):
     print(i)
     img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
-    tmp_img = img.reshape(160, 160, 1)
-    imgs[i] = hist_stretch(tmp_img, 160, 160, 128)
+    #tmp_img = img.reshape(160, 160, 1)
+    #imgs[i] = hist_stretch(tmp_img, 160, 160, 128)
+    imgs[i] = img.reshape(160, 160, 1)
 
     # get user id
     labels[i] = parse_file_name(img_path)
