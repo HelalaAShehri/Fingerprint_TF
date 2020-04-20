@@ -9,6 +9,8 @@ Deep Learning fingerprint recognition using Tensorflow2.
 
     Tensorflow : >= 2.0
 
+See requirements.txt file for detail.
+
 ### Reference
     https://github.com/kairess/fingerprint_recognition
 
